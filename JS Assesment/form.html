@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+     .formcontainer {
+      background: white;
+      border-radius: 12px;
+      padding: 25px;
+      max-width: 500px;
+      width: 100%;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+    }
+
+    h2 { text-align: center; margin-bottom: 20px; }
+
+    label { font-weight: bold; display: block; margin-bottom: 5px; }
+
+    input, select, textarea {
+      width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #ccc;
+    }
+
+    form { display: grid; gap: 15px; }
+
+    button {
+      padding: 12px;
+      border: none;
+      border-radius: 6px;
+      background: blueviolet;
+      color: whitesmoke; font-weight: bold; cursor: pointer;
+    }
+
+    span.error {
+      color: red ;
+      font-size: 12px;
+      margin-top: 3px;
+      display: block;
+    }
+    </style>
+</head>
+<body>
+    
+  <div class="formcontainer">
+    <h2>Customer Feedback Form</h2>
+    <form id="feedbackForm">
+      <div>
+        <label for="name">Attendee Name</label>
+        <input type="text" id="name" name="name" placeholder="Enter Your Name ">
+        <span class="error" id="nameError"></span>
+      </div>
+      <div>
+        <label for="email">Email Address</label>
+        <input type="email" id="email" name="email" placeholder="dp@email.com">
+        <span class="error" id="emailError"></span>
+      </div>
+      <div>
+        <label for="event">Event Attended</label>
+        <select id="event" name="event">
+          <option value="">Select Event</option>
+          <option value="Meetup">Meetup</option>
+          <option value="Workshop">Workshop</option>
+          <option value="Webinar">Webinar</option>
+        </select>
+        <span class="error" id="eventError"></span>
+      </div>
+      <div>
+        <label for="rating">Rating</label>
+        <select id="rating" name="rating">
+          <option value="">Select Rating</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+        </select>
+        <span class="error" id="ratingError"></span>
+      </div>
+      <div>
+        <label for="comments">Comments</label>
+        <textarea id="comments" name="comments" placeholder="Feedback"></textarea>
+        <span class="error" id="commentsError"></span>
+      </div>
+      <button type="submit">Submit Feedback</button>
+    </form>
+  </div>
+
+  <script>
+     class FeedbackFormHandler {
+    constructor(formSelector) {
+      this.form = document.querySelector(formSelector);
+      this.form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        this.clearErrors();
+        this.handleSubmit();
+      });
+    }
+
+    clearErrors() {
+      document.querySelectorAll(".error").forEach(span => {
+        span.textContent = "";
+      });
+    }
+
+    validateForm() 
+    {
+      let valid = true;
+
+      const name     = this.form.name.value.trim();
+      const email    = this.form.email.value.trim();
+      const event    = this.form.event.value;
+      const rating   = parseInt(this.form.rating.value);
+      const comments = this.form.comments.value.trim();
+
+      if (name.length < 3) 
+      {
+        document.getElementById("nameError").textContent =
+          "Name must be at least 3 characters.";
+        valid = false;
+      }
+
+      if (!event) 
+      {
+        document.getElementById("eventError").textContent =
+          "Please select an event.";
+        valid = false;
+      }
+
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailPattern.test(email)) 
+      {
+        document.getElementById("emailError").textContent =
+          "Enter a valid email.";
+        valid = false;
+      }
+
+      if (!(rating >= 1 && rating <= 5))
+       {
+        document.getElementById("ratingError").textContent =
+          "Rating must be between 1 and 5.";
+        valid = false;
+      }
+
+      if (comments.length < 10)
+       {
+        document.getElementById("commentsError").textContent =
+          "Comments must be at least 10 characters.";
+        valid = false;
+       }
+
+       
+       return {
+        valid,
+        data: { name, email, event, rating, comments }
+      };
+
+    }
+    
+    
+
+    
+    saveToLocalStorage(feedback) 
+    {
+      let feedbacks = JSON.parse(localStorage.getItem("feedbacks")) || [];
+      feedbacks.push(feedback);
+      localStorage.setItem("feedbacks", JSON.stringify(feedbacks));
+    }
+
+     clearForm() 
+     {
+      this.form.reset();
+    }
+
+    handleSubmit()
+     {
+      const validation = this.validateForm();
+      if (!validation.valid) 
+      return;
+
+      this.saveToLocalStorage(validation.data);
+      this.clearForm();
+     
+    }
+}
+
+new FeedbackFormHandler("#feedbackForm");
+
+
+  </script>
+</body>
+</html>

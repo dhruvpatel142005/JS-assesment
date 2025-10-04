@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>View Feedback</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background:whitesmoke;
+      padding: 20px;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .feedback-box {
+      background:white;
+      border-radius: 10px;
+       padding: 20px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+      margin-bottom: 15px;
+    }
+
+    .feedback-box span {
+      font-weight: bold;
+      color: #2575fc;
+    }
+
+    
+    .feedback-box p {
+      margin: 6px 0;
+    }
+
+    #noFeedback {
+      color: red;
+      text-align: center;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  
+  <h2>Submitted feedback List</h2>
+  <div id="feedbackList"></div>
+
+  <script>
+  
+const feedbackList = document.getElementById("feedbackList");
+const feedbacks = JSON.parse(localStorage.getItem("feedbacks")) || [];
+
+if (feedbacks.length === 0) {
+  feedbackList.innerHTML = "<p id='noFeedback'>No feedback available. Submit the form first!</p>";
+} else {
+  feedbacks.forEach(fb => {
+    const div = document.createElement("div");
+    div.classList.add("feedback-box");
+    div.innerHTML = `
+      <p><span>Name:</span> ${fb.name}</p>
+      <p><span>Email:</span> ${fb.email}</p>
+      <p><span>Event:</span> ${fb.event}</p>
+      <p><span>Rating:</span> ${fb.rating}</p>
+      <p><span>Comments:</span> ${fb.comments}</p>
+    `;
+    feedbackList.appendChild(div);
+  });
+}
+
+</script>
+
+
+</body>
+</html>
