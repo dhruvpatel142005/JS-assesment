@@ -48,11 +48,13 @@
 
   <script>
   
+
+  
 const feedbackList = document.getElementById("feedbackList");
 const feedbacks = JSON.parse(localStorage.getItem("feedbacks")) || [];
 
 if (feedbacks.length === 0) {
-  feedbackList.innerHTML = "<p id='noFeedback'>No feedback available. Submit the form first!</p>";
+  feedbackList.innerHTML = "<p id='noFeedback'>No feedback available.</p>";
 } else {
   feedbacks.forEach(fb => {
     const div = document.createElement("div");
@@ -68,8 +70,11 @@ if (feedbacks.length === 0) {
   });
 }
 
+
+
 </script>
 
 
 </body>
 </html>
+
